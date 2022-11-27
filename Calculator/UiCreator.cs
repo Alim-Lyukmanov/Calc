@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows;
+using System.Windows.Controls;
 
 internal class UiCreator
 {
@@ -15,9 +17,11 @@ internal class UiCreator
         RowDefinitionCollection rd = NewGrid.RowDefinitions;
         ColumnDefinitionCollection cd = NewGrid.ColumnDefinitions;
 
-        rd = AddRows(rd, 4);
-        cd = AddColums(cd, 5);
+        rd = AddRows(rd, 5);
+        cd = AddColums(cd, 4);
 
+        AddButtons();
+        AddTextBox();
         return NewGrid;
     }
 
@@ -25,7 +29,13 @@ internal class UiCreator
     {
         for (int i = 0; i < rowsAmount; i++)
         {
-            rd.Add(new RowDefinition());
+            var newRow = new RowDefinition();
+            if (i == 0)
+            {
+                newRow.Name = "Menu";
+                newRow.Height = new GridLength(150);
+            }
+            rd.Add(newRow);
         }
         return rd;
     }
@@ -38,5 +48,43 @@ internal class UiCreator
         }
 
         return cd;
+    }
+
+
+    private void AddButtons()
+    {
+        int content = 1;
+        for (int i = 1; i<NewGrid.RowDefinitions.Count; i++)
+        {
+            for (int j = 0; j<NewGrid.ColumnDefinitions.Count; j++)
+            {
+                Button btn = new Button();
+                btn.Content = content;
+                btn.Style = AddStyle();
+                Grid.SetRow(btn, i);
+                Grid.SetColumn(btn, j);
+                Grid.SetColumnSpan(btn, 1);
+                NewGrid.Children.Add(btn);
+                content++;
+            }
+        }
+    }
+
+    private void AddTextBox()
+    {
+        var textBox = new TextBox();
+        Grid.SetRow(textBox, 0);
+        Grid.SetColumn(textBox, 0);
+        Grid.SetColumnSpan(textBox, NewGrid.ColumnDefinitions.Count);
+        NewGrid.Children.Add(textBox);
+    }
+
+
+    private Style AddStyle()
+    {
+        var resDict = new ResourceDictionary() { Source = new Uri(@"C:\Users\desuFok\source\repos\Calculator\Calculator\ResourceDictionary.xaml") };
+        var style = new Style();
+        style = (Style)resDict["btnTemplate"]; 
+        return style;
     }
 }
