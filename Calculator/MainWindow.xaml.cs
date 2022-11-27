@@ -23,6 +23,13 @@ namespace Calculator
         public MainWindow()
         {
             InitializeComponent();
+            BuildUi();
+        }
+
+        public void BuildUi()
+        {
+            var uiCreator = new UiCreator();
+            this.Content = uiCreator.CreateGrid();
         }
     }
 }
